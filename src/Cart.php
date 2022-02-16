@@ -380,8 +380,6 @@ class Cart
 
         $storedContent = unserialize($stored->content);
 
-        $currentInstance = $this->currentInstance();
-
         $this->instance($stored->instance);
 
         $content = $this->getContent();
@@ -393,11 +391,16 @@ class Cart
         $this->events->dispatch('cart.restored');
 
         $this->session->put($this->instance, $content);
-
+    }
+    
+    public function unstore($identifier)
+    {
+        $currentInstance = $this->currentInstance();
+        
         $this->instance($currentInstance);
-
+        
         $this->getConnection()->table($this->getTableName())
-            ->where('identifier', $identifier)->delete();
+          ->where('identifier', $identifier)->delete();
     }
 
     /**
